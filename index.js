@@ -6,7 +6,6 @@ const session = require('express-session');
 //require('./passport')
 require('dotenv').config();
 const http = require('http'); // get http
-const MongoStore = require('connect-mongo');
 
 //define env config
 port = process.env.PORT || 3000;
@@ -34,11 +33,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors(corsOptions));
-// app.use(session({
-//     secret: secret,
-//     resave: false,
-//     saveUninitialized: false
-// }));
+app.use(session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
