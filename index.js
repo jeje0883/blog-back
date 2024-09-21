@@ -6,11 +6,13 @@ const session = require('express-session');
 //require('./passport')
 require('dotenv').config();
 const http = require('http'); // get http
+const MongoStore = require('connect-mongo');
 
 //define env config
 port = process.env.PORT || 3000;
 mongodb = process.env.MONGODB_STRING;
-secret = process.env.clientSecret;
+secret = process.env.SESSION_SECRET;
+
 
 
 
@@ -34,10 +36,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors(corsOptions));
 app.use(session({
-    secret: secret,
+    secret: secret,  // Use the correct secret
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: mongodb }) // Use MongoStore to store sessions in MongoDB
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
