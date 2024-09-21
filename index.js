@@ -1,73 +1,61 @@
+// Load environment variables at the very beginning
+require('dotenv').config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require('passport');
 const session = require('express-session');
-//require('./passport')
-require('dotenv').config();
-const http = require('http'); // get http
 const MongoStore = require('connect-mongo');
+const http = require('http'); // not used in the provided code
 
-//define env config
-port = process.env.PORT || 3000;
-mongodb = process.env.MONGODB_STRING;
-secret = process.env.SESSION_SECRET;
-
-
+const port = process.env.PORT || 3000;
+const mongodb = process.env.MONGODB_STRING;
+const secret = process.env.SECRET_KEY;
 
 
-//setup middleware
+// Middleware Setup
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://zuitt-bootcamp-prod-460-7841-descalsota.s3-website.us-east-1.amazonaws.com'], 
+    origin: [
+        'http://localhost:3000', 
+        'http://zuitt-bootcamp-prod-460-7841-descalsota.s3-website.us-east-1.amazonaws.com'
+    ], 
     credentials: true, 
     optionsSuccessStatus: 200 
 };
 
-
-//connect to MONGODB
-mongoose.connect(mongodb);
-mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
-
-
-//setup the server
+mongoose.connect(mongodb)
+    .then(() => console.log('Now connected to MongoDB Atlas'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
+
 app.use(session({
-    secret: secret,  // Use the correct secret
+    secret: secret, // Ensure this is a strong, unique secret
     resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: mongodb }) // Use MongoStore to store sessions in MongoDB
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: mongodb }),
+    cookie: { secure: false } // Set to true if using HTTPS
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// define routes
-
+// Routes
 const userRoutes = require("./routes/userRoute");
 const postRoutes = require("./routes/postRoute");
-
-
-
-
-// setup routes
 
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
-
-
-// initialize the server
-if(require.main === module){
-	app.listen(port, () => {
-		console.log(`API is now online on port ${ port }`)
-	});
+// Start Server
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`API is now online on port ${port}`);
+    });
 }
 
-
-
-module.exports = {app, mongoose};
-
+module.exports = { app, mongoose };
