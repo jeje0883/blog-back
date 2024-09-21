@@ -28,7 +28,7 @@ router.post('/search-by-title', postController.searchByTitle); // No verificatio
 
 router.post('/search-by-content', postController.searchByContent); // No verification required
 
-router.patch('/:id/update', verify, verifyAdmin, postController.updatePost); // Needs verify and verifyAdmin
+router.patch('/:id/update', verify, postController.updatePost); // Needs verify and verifyAdmin
 
 router.patch('/:id/activate', verify, verifyAdmin, postController.activatePost); // Needs verify and verifyAdmin
 
@@ -37,8 +37,8 @@ router.patch('/:id/archive', verify, verifyAdmin, postController.archivePost); /
 // Comment Routes
 router.post('/:id/comments', verify, postController.addComment); // Needs verify to add a comment
 router.patch('/:id/comments/:commentId', verify, postController.editComment); // Needs verify to edit a comment
-router.delete('/:id/comments/:commentId', verify, verifyAdmin, postController.deleteComment); // Needs verify and verifyAdmin to delete a comment
+router.delete('/:id/comments/:commentId', verify, postController.deleteComment); // Needs verify and verifyAdmin to delete a comment
 
-router.delete('/:id/delete', verify, verifyAdmin, postController.deletePost);
+router.delete('/:id/delete', verify, postController.deletePost);
 
 module.exports = router;

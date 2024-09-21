@@ -5,7 +5,7 @@ const { errorHandler } = require("../auth"); // Ensure errorHandler is correctly
 module.exports.createPost = async (req, res) => {
     const { title, content } = req.body;
     const { id , username } = req.user; // Assuming 'id' is the user's ID from the auth middleware
-    //console.log(`Creating post - User: ${JSON.stringify(req.user)}, Title: ${title}, Content: ${content}`);
+    console.log(`Creating post - User: ${JSON.stringify(req.user)}, Title: ${title}, Content: ${content}`);
 
     const newPost = new Post({
         title,
@@ -16,13 +16,13 @@ module.exports.createPost = async (req, res) => {
 
     try {
         const savedPost = await newPost.save();
-        //console.log('Post created successfully:', savedPost);
+        console.log('Post created successfully:', savedPost);
         return res.status(201).send({
             message: 'Post created successfully',
             savedPost
         });
     } catch (err) {
-        //console.error('Error creating post:', err);
+        console.error('Error creating post:', err);
         return errorHandler(err, req, res);
     }
 };
