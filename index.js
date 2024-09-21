@@ -23,8 +23,8 @@ const corsOptions = {
 
 
 //connect to MONGODB
-mongoose.connect(mongodb);
-mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
+// mongoose.connect(mongodb);
+// mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
 
 
 //setup the server
@@ -62,5 +62,39 @@ app.use("/posts", postRoutes);
 // 		console.log(`API is now online on port ${ port }`)
 // 	});
 // }
+
+let isConnected = false;
+
+const connectDB = async () => {
+    if (isConnected) {
+        console.log('=> using existing database connection');
+        return;
+    }
+
+    try {
+        await mongoose.connect(mongodb, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        isConnected = true;
+        console.log('=> connected to MongoDB');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        throw error;
+    }
+};
+
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+    await connectDB();
+    next();
+});
+
+
+
+
+
+
+
 
 module.exports = {app, mongoose};
