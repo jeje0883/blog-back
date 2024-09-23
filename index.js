@@ -19,11 +19,10 @@ const frontend = process.env.FRONT_URL;
 const corsOptions = {
     origin: [
         'http://localhost:3000',
-        frontend, 
-        
-    ], 
-    credentials: true, 
-    optionsSuccessStatus: 200 
+        frontend,  
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
 };
 
 mongoose.connect(mongodb)
