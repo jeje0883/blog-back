@@ -18,7 +18,7 @@ const secret = process.env.SECRET_KEY;
 const corsOptions = {
     origin: [
         'http://localhost:3000', 
-        'http://zuitt-bootcamp-prod-460-7841-descalsota.s3-website.us-east-1.amazonaws.com'
+        'https://blog-front-three-rho.vercel.app'
     ], 
     credentials: true, 
     optionsSuccessStatus: 200 

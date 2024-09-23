@@ -7,13 +7,13 @@ const { verify, verifyAdmin } = require("../auth"); // Ensure these middleware f
 const router = express.Router();
 
 // Optional: Middleware to log requests
-function logger(req, res, next) {
-    console.log('Printing from postRouter');
-    next();
-}
+// function logger(req, res, next) {
+//     console.log('Printing from postRouter');
+//     next();
+// }
 
 // Apply the logger middleware to all routes in this router
-router.use(logger);
+// router.use(logger);
 
 // Post Routes
 router.post('/', verify, postController.createPost); // Needs verify

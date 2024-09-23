@@ -19,7 +19,7 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now // Automatically set the time to now
     }
-}); 
+}, { timestamps: true });
 
 const postSchema = new mongoose.Schema({
     title: {

@@ -209,9 +209,8 @@ module.exports.archivePost = async (req, res) => {
 
 // Add a comment to a post
 module.exports.addComment = async (req, res) => {
-    const { userID, comment, commentor } = req.body;
-    const { id } = req.params; // User ID from auth middleware
-    const postId = id; 
+    const {  comment } = req.body;
+    const postId = req.params.id; // User ID from auth middleware
     //console.log(`Adding comment to ${postId} by user ID: ${userID}, Comment: ${comment}`);
 
     try {
@@ -221,7 +220,7 @@ module.exports.addComment = async (req, res) => {
             return res.status(404).send({ error: 'Post not found' }); 
         }
 
-        post.comments.push({ userID: userID, commentor, comment });
+        post.comments.push({ userID: req.user.id, commentor: req.user.username, comment });
         await post.save();
         //console.log('Comment added successfully:', post.comments);
 
