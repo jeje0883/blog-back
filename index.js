@@ -14,8 +14,6 @@ const mongodb = process.env.MONGODB_STRING;
 const secret = process.env.SECRET_KEY;
 const frontend = process.env.FRONT_URL;
 
-console.log('frontend',frontend);
-console.log('mongo',mongodb);
 
 // Middleware Setup
 const corsOptions = {
