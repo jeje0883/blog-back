@@ -30,9 +30,10 @@ mongoose.connect(mongodb)
     .catch(err => console.error('MongoDB connection error:', err));
 
 const app = express();
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+
 
 app.use(session({
     secret: secret, // Ensure this is a strong, unique secret
