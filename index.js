@@ -12,13 +12,17 @@ const http = require('http'); // not used in the provided code
 const port = process.env.PORT || 3000;
 const mongodb = process.env.MONGODB_STRING;
 const secret = process.env.SECRET_KEY;
+const frontend = process.env.FRONT_URL;
 
+console.log('frontend',frontend);
+console.log('mongo',mongodb);
 
 // Middleware Setup
 const corsOptions = {
     origin: [
-        'http://localhost:3000', 
-        'https://blog-front-three-rho.vercel.app'
+        'http://localhost:3000',
+        frontend, 
+        
     ], 
     credentials: true, 
     optionsSuccessStatus: 200 
