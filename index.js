@@ -7,6 +7,9 @@ const cors = require("cors");
 const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const cron = require('node-cron');       // For cron jobs
+const axios = require('axios');          // For making HTTP requests
+const rateLimit = require('express-rate-limit'); // For rate limiting
 
 const port = process.env.PORT || 3000;
 const mongodb = process.env.MONGODB_STRING;
@@ -67,6 +70,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Rate Limiter for /ping endpoint
+const pingLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 1,              // Limit each IP to 1 request per windowMs
+  message: 'Too many requests from this IP, please try again after a minute.'
+});
+
+// Public /ping endpoint
+app.get('/ping', pingLimiter, (req, res) => {
+  res.json({ message: 'Server is alive.' });
+});
+
 // Routes
 const userRoutes = require("./routes/userRoute");
 const postRoutes = require("./routes/postRoute");
@@ -86,5 +101,19 @@ if (require.main === module) {
     console.log(`API is now online on port ${port}`);
   });
 }
+
+// Cron Job to ping every 14 minutes
+cron.schedule('*/14 * * * *', () => {
+  console.log('Running cron job to ping the server.');
+
+  // Replace with your actual server URL if not localhost
+  axios.get(`http://localhost:${port}/ping`)
+    .then(response => {
+      console.log('Ping successful:', response.data);
+    })
+    .catch(error => {
+      console.error('Error pinging the server:', error.message);
+    });
+});
 
 module.exports = { app, mongoose };
