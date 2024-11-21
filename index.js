@@ -11,6 +11,9 @@ const cron = require('node-cron');       // For cron jobs
 const axios = require('axios');          // For making HTTP requests
 const rateLimit = require('express-rate-limit'); // For rate limiting
 
+//server ping toggler
+const alwaysAwake = false; //
+
 const port = process.env.PORT || 3000;
 const mongodb = process.env.MONGODB_STRING;
 const secret = process.env.SECRET_KEY;
@@ -103,17 +106,19 @@ if (require.main === module) {
 }
 
 // Cron Job to ping every 14 minutes
-cron.schedule('*/14 * * * *', () => {
-  console.log('Running cron job to ping the server.');
+if (alwaysAwake) {
+    cron.schedule('*/14 * * * *', () => {
+    console.log('Running cron job to ping the server.');
 
-  // Replace with your actual server URL if not localhost
-  axios.get(`http://localhost:${port}/ping`)
-    .then(response => {
-      console.log('Ping successful:', response.data);
-    })
-    .catch(error => {
-      console.error('Error pinging the server:', error.message);
-    });
-});
+    // Replace with your actual server URL if not localhost
+    axios.get(`http://localhost:${port}/ping`)
+      .then(response => {
+        console.log('Ping successful:', response.data);
+      })
+      .catch(error => {
+        console.error('Error pinging the server:', error.message);
+      });
+  });
+}
 
 module.exports = { app, mongoose };
