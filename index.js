@@ -62,16 +62,16 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-  secret: secret, // Ensure this is a strong, unique secret
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: mongodb }),
-  cookie: { secure: true }, // Set to true if using HTTPS
-}));
+// app.use(session({
+//   secret: secret, // Ensure this is a strong, unique secret
+//   resave: false,
+//   saveUninitialized: true,
+//   store: MongoStore.create({ mongoUrl: mongodb }),
+//   cookie: { secure: true }, // Set to true if using HTTPS
+// }));
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // Rate Limiter for /ping endpoint
 const pingLimiter = rateLimit({
